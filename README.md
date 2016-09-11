@@ -58,7 +58,7 @@ results in html that looks like:
 
 [Simple demo](http://richdebourke.github.io/cjk-word-wrap/simple-demo.html) - demo of the plugin wrapping multiple sections of Korean text
 
-[Evaluation demo](http://richdebourke.github.io/cjk-word-wrap/evaluation-demo.html.html) - demo of the plugin that supports evaluating setting `word-break` to `normal` or `keep-all` and styling the `<span>` tags with `white-space: normal` or `nowrap` to demonstrate the operation of the plugin
+[Evaluation demo](http://richdebourke.github.io/cjk-word-wrap/evaluation-demo.html) - demo of the plugin that supports evaluating setting `word-break` to `normal` or `keep-all` and styling the `<span>` tags with `white-space: normal` or `nowrap` to demonstrate the operation of the plugin
 
 Running the Operational demo on different browsers will show which browsers support `keep-all` (if the browser supports `keep-all`, there will be no difference in the word wrapping for `keep-all` and `white-space: nowrap`).
 
