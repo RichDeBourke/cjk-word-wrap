@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CJK Word Wrap Simple Demo</title>
+
+    <meta name="description" content="Plugin that wraps each Korean word in span tags styled with white-space: nowrap. This prevents words splitting across lines, the same as word-break: keep-all, but wrapping works on all browsers including older Android Internet browser.">
+
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans:400,400i,700" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.15em;
+            height: 100%;
+            color: #212121;
+        }
+
+        h1 {
+            font-size: 1.6em;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+
+        .container {
+            width: 340px;
+            margin: 12px auto 20px auto;
+            position: relative;
+        }
+
+        .k-box {
+            font-family: 'Nanum Myeongjo', 'Malgun Gothic', sans-serif;
+            line-height: 1.5em;
+            text-align: left;
+            word-break: normal;
+        }
+
+        .cjk-wrap {
+            white-space: nowrap;
+        }
+    </style>
+
+    <!--[if lte IE 8]>
+        <link href="css/javascript-word-wrap-IE8.css" rel="stylesheet" type="text/css">
+    <![endif]-->
+
+</head>
+
+<body>
+    <!--[if lte IE 8]>
+        <div class="ie_warning">
+            <div>
+                <img src="images/IE_warning_dialog.png" width="24" height="24" alt=""/>
+                This plugin is not compatible with older versions of Internet Explorer - there is no wrapping.
+            </div>
+        </div>
+    <![endif]-->
+
+    <div class="container">
+        <h1>Korean Word Split Demo</h1>
+        <div class="k-box" lang="ko">
+            이제 훈민정음을 만드는 <a href="#">것은 처음부터 슬기로</a> 마련하고, 애써서 찾은 것이 아니라 다만 그 (원래에 있는)성음(의 원리)을 바탕으로 이치를 다한 것 뿐이다. (음양의) 이치가 이미 둘이 아니니 어찌 천지 자연, (변화를 주관하는) 귀신과 그 사용을 같이 하지 않을 수 있겠는가? 훈민정음 스물 여덟자는 각각 그 모양을 본떠서 만들었다.
+        </div>
+        <br /><br />
+        <div class="k-box" lang="ko">
+            이제 훈민정음을 만드는 <a href="#">것은 처음부터 슬기로</a> 마련하고, 애써서 찾은 것이 아니라 다만 그 (원래에 있는)성음(의 원리)을 바탕으로 이치를 다한 것 뿐이다. (음양의) 이치가 이미 둘이 아니니 어찌 천지 자연, (변화를 주관하는) 귀신과 그 사용을 같이 하지 않을 수 있겠는가? 훈민정음 스물 여덟자는 각각 그 모양을 본떠서 만들었다.
+        </div>
+    </div>
+
+    <script src="js/cjkWrap.js"></script>
+    <script>
+        // If the browser is IE8 or older, chkWrap will not create
+        // the wrap function as older Internet Explorers do not
+        // support the functions used in the plugin.
+        if (typeof window.cjkWrap === "function") {
+            window.cjkWrap("k-box");
+        }
+    </script>
+</body>
+
+</html>

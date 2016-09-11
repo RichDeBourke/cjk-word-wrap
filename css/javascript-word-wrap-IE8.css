@@ -1,0 +1,31 @@
+/* =======================================================================
+ * javascript-word-wrap-IE8.css
+ * Date: 2016/09/08
+ * By: Rich DeBourke
+ *
+ * For IE 8 and below
+ * ======================================================================= */
+
+.ie_warning {
+    position: static;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background-color: #fdf2ab;
+    border-bottom: 1px solid #A29330;
+    border-top-width: 0;
+}
+.ie_warning div {
+    width: 960px;
+    line-height: 16px;
+    font-size: medium;
+    margin: 0 auto 0 auto;
+    padding: 6px 0 6px 0;
+    text-align: center;
+}
+.ie_warning img {
+    padding-right: 6px;
+    vertical-align: middle;
+    box-sizing: content-box;
+}

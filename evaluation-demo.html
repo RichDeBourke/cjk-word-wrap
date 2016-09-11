@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en" class="no-touch">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CJK Word Wrap Evaluation Demo</title>
+
+    <meta name="description" content="Functional demo for wrapping Korean text across lines using word-break: keep-all and wrapping each word in a span tag styled as white-space: nowrap.">
+
+    <script>
+        (function (window, document, navigator) {
+            if (('ontouchstart' in window) || (navigator.maxTouchPoints && navigator.maxTouchPoints > 0)) {
+                document.documentElement.className = document.documentElement.className.replace(/\bno-touch\b/, 'touch');
+            }
+        }(window, document, navigator));
+    </script>
+
+    <!-- Older versions of IE11 have a problem with rems for :before/:after-pseudo elements, which I use in the slide switches. Modernizr adds a no-pseudoelementlineheightinrems class to IE11 that applys an alternative style. -->
+    <script src="js/modernizr.js"></script>
+
+    <link href="css/mt-range-slider.css" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata%7COpen+Sans:400,400i,700" rel="stylesheet" type="text/css" />
+    <link href="http://fonts.googleapis.com/earlyaccess/nanummyeongjo.css" rel="stylesheet" type="text/css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+        	-webkit-tap-highlight-color:transparent;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 400;
+            line-height: 1.15em;
+            height: 100%;
+            color: #212121;
+        }
+
+        h1 {
+            font-size: 1.6em;
+            text-align: center;
+            margin-bottom: 0.5em;
+        }
+
+        h2 {
+            font-size: 1.3em;
+            margin-bottom: 0.5em;
+            clear: both;
+        }
+
+        p,
+        ul {
+            margin-bottom: 1em;
+        }
+
+        li {
+            margin-bottom: 0.5em;
+        }
+
+        code {
+            font-family: 'Inconsolata', monospace;
+        }
+
+        .container {
+            width: 340px;
+            margin: 12px auto 20px auto;
+            position: relative;
+            border-bottom: solid 1px #cfcfcf;
+        }
+
+        .title {
+            position: relative;;
+            left: 0;
+            top: 0;
+            margin-bottom: 6px;
+            font-size: 0.8125rem;
+        }
+
+        .k-box {
+            font-family: 'Nanum Myeongjo', 'Malgun Gothic', sans-serif;
+            margin-bottom: 20px;
+            line-height: 1.5em;
+            width: 300px;
+            text-align: left;
+            word-break: normal;
+            border-right: solid 1px #FFFFFF;
+        }
+
+        .footer {
+            min-width: 340px;
+            max-width: 480px;
+            margin: 0 auto 0 auto;
+            padding: 0 12px;
+        }
+
+        .slide-switch-container {
+            position: relative;
+            left: 0;
+            top: 0;
+            padding: 0.375rem 0;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .slide-switch {
+            position: relative;
+            float: right;
+            width: 6rem;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        .slide-switch-checkbox {
+            display: none;
+        }
+
+        .slide-switch-checkbox:checked+ .slide-switch-label .slide-switch-inner {
+            margin-left: 0;
+        }
+
+        .slide-switch-checkbox:checked+ .slide-switch-label .slide-switch-switch {
+            right: 0;
+        }
+
+        .slide-switch-label {
+            display: block;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid #000000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            padding: 0;
+            background-color: transparent;
+            margin: 0;
+        }
+
+        .slide-switch-inner {
+            display: block;
+            width: 200%;
+            margin-left: -100%;
+            -moz-transition: margin 0.3s ease-in 0s;
+            -webkit-transition: margin 0.3s ease-in 0s;
+            -o-transition: margin 0.3s ease-in 0s;
+            transition: margin 0.3s ease-in 0s;
+        }
+
+        .slide-switch-inner:before,
+        .slide-switch-inner:after {
+            display: block;
+            float: left;
+            width: 50%;
+            height: 2rem;
+            padding: 0;
+            line-height: 2rem;
+            box-sizing: border-box;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+
+        .slide-switch-inner:before {
+            padding-left: 0.625rem;
+            padding-right: 2.0rem;
+            background-color: #008CBA;
+            color: #FFFFFF;
+        }
+
+        .slide-switch-inner:after {
+            padding-left: 2.0rem;
+            padding-right: 0.625rem;
+            background-color: #EEEEEE;
+            color: #000000;
+        }
+
+        .align-left-justify:before {
+            content: "left";
+        }
+
+        .align-left-justify:after {
+            content: "justify";
+        }
+
+        .word-break:before {
+            content: "normal";
+        }
+
+        .word-break:after {
+            content: "keep-all";
+        }
+
+        .white-space:before {
+            content: "normal";
+        }
+
+        .white-space:after {
+            content: "nowrap";
+        }
+
+        .slide-switch-switch {
+            display: block;
+            width: 18px;
+            margin: 6px;
+            background: #FFFFFF;
+            border: 2px solid #000000;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-sizing: border-box;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 66px;
+            -moz-transition: all 0.3s ease-in 0s;
+            -webkit-transition: all 0.3s ease-in 0s;
+            -o-transition: all 0.3s ease-in 0s;
+            transition: all 0.3s ease-in 0s;
+        }
+
+        /* the class no-pseudoelementlineheightinrems is added by modernizr to the html tag for browsers like IE11 that have a bug with rem in the after element  */
+        .no-pseudoelementlineheightinrems .slide-switch-inner:before,
+        .no-pseudoelementlineheightinrems .slide-switch-inner:after {
+            height: 32px;
+            line-height: 32px;
+            font-size: 16px;
+        }
+
+        .no-pseudoelementlineheightinrems .slide-switch-inner:before {
+            font-size: 14px;
+            padding-left: 10px;
+            padding-right: 32px;
+        }
+
+        .no-pseudoelementlineheightinrems .slide-switch-inner:after {
+            font-size: 14px;
+            padding-right: 10px;
+            padding-left: 32px;
+        }
+
+        .slider-container {
+            position: relative;
+            clear: both;
+            padding-top: 0.25rem;
+            padding-bottom: 0.25rem;
+            border-top: solid 1px #000000;
+            border-bottom: solid 1px #000000;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .value {
+            position: absolute;
+            top: 0.5rem;
+            right: 0;
+            font-size: 0.75rem;
+        }
+
+        .rs-track {
+            background-color: #cdcdcd;
+            top: 16px;
+            box-sizing: border-box;
+        }
+
+        .no-touch .rs-track {
+            height: 16px;
+            top: 17px;
+        }
+
+        .touch .rs-track {
+            height: 48px;
+            top: 1px;
+        }
+
+        .rs-slider {
+            top: 8px;
+            box-sizing: border-box;
+        }
+
+        .no-touch .rs-slider {
+            top: 9px;
+            width: 30px;
+            height: 30px;
+        }
+
+        .touch .rs-slider {
+            top: 1px;
+            width: 46px;
+            height: 46px;
+        }
+
+        .cjk-wrap {
+            white-space: normal;
+        }
+    </style>
+
+    <!--[if lte IE 8]>
+        <link href="css/javascript-word-wrap-IE8.css" rel="stylesheet" type="text/css">
+    <![endif]-->
+
+</head>
+
+<body onload="uncheckAll();">
+    <!--[if lte IE 8]>
+        <div class="ie_warning">
+            <div>
+                <img src="images/IE_warning_dialog.png" width="24" height="24" alt=""/>
+                This plugin is not compatible with older versions of Internet Explorer - there is no wrapping.
+            </div>
+        </div>
+    <![endif]-->
+
+    <div class="container">
+        <h1>Korean Word Split Test</h1>
+        <div class="slide-switch-container">
+            <span class="title"><strong>Align</strong> (left/justify)</span>
+            <div class="slide-switch">
+                <input type="checkbox" name="align-left-justify" class="slide-switch-checkbox" id="align-left-justify" checked>
+                <label class="slide-switch-label" for="align-left-justify">
+                    <span class="slide-switch-inner align-left-justify"></span>
+                    <span class="slide-switch-switch"></span>
+                </label>
+            </div>
+        </div>
+        <div class="slide-switch-container">
+            <span class="title"><strong>Word-break</strong> (normal/keep-all)</span>
+            <div class="slide-switch">
+                <input type="checkbox" name="word-break" class="slide-switch-checkbox" id="word-break" checked>
+                <label class="slide-switch-label" for="word-break">
+                    <span class="slide-switch-inner word-break"></span>
+                    <span class="slide-switch-switch"></span>
+                </label>
+            </div>
+        </div>
+        <div class="slide-switch-container">
+            <span class="title"><strong>White-space</strong> (normal/nowrap)</span>
+            <div class="slide-switch">
+                <input type="checkbox" name="white-space" class="slide-switch-checkbox" id="white-space" checked>
+                <label class="slide-switch-label" for="white-space">
+                    <span class="slide-switch-inner white-space"></span>
+                    <span class="slide-switch-switch"></span>
+                </label>
+            </div>
+        </div>
+        <!-- Slider -->
+        <div class="slider-container">
+            <p class="title"><strong>Adjust text box size</strong></p>
+            <div id="value" class="value">300</div>
+            <input type="text" id="slider" class="slider" value="" name="slider" tabindex="1">
+        </div>
+        <div class="k-box" lang="ko">
+            이제 훈민정음을 만드는 <a href="#">것은 처음&shy;부터 슬기로</a> 마련하고, 애써서 찾은 것이 아니라 다만 그 (원래에 있는)성음(의 원리)을 바탕으로 이치를 다한 것 뿐이다. (음양의) 이치가 이미 둘이 아니니 어찌 천지 자연, (변화를 주관하는) 귀신과 그 사용을 같이 하지 않을 수 있겠는가? 훈민정음 스물 여덟자는 각각 그 모양을 본떠서 만들었다.
+        </div>
+    </div>
+    <div class="footer">
+        <h2>Evaluating keep-all &amp; nowrap</h2>
+        <p>You can see the effect <code>keep-all</code> and <code>nowrap</code> CSS settings have by selecting different options and then adjusting the width of the text box to see how the text wraps:</p>
+        <ul style="margin-left: 40px;">
+            <li><strong>Align</strong> - sets the alignment for the text block to either Left or Justified</li>
+            <li><strong>Break</strong> - sets the <code>word-break</code> setting for the text block to either <code>normal</code> or <code>keep-all</code></li>
+            <li><strong>White-space</strong> - sets the <code>white-space</code> setting for each individual word to either <code>normal</code> or <code>nowrap</code></li>
+            <li><strong>Adjust text box size</strong> - slider for increases or decreases the size of the text box</li>
+        </ul>
+        <h2>Splitting Korean Words</h2>
+        <p>There are two ways Korean text should be split across lines (based on <a href="http://nojeokhill.koreanconsulting.com/2013/05/korean-translation-tip-cardinal-rules-of-korean-language-layout.html">Cardinal Rules of Korean-Language Layout</a> by Steven Bammel, president of Korean Consulting &amp; Translation Service):</p>
+        <ul style="margin-left: 40px;">
+            <li><strong>Justified</strong> where words are allowed to split anywhere within the word</li>
+            <li><strong>Aligned left</strong> where words are <em>not</em> allowed to split - each word stays together on the same line</li>
+        </ul>
+        <h2>The Problem</h2>
+        <p>The default browser action is to split Korean words (as well as Chinese and Japanese) anywhere in the word, which is fine for justified text, but not good for left aligned text. The <code>word-break: keep-all;</code> property, which keeps Korean words from splitting, was added to the CSS3 specification around 2011. As of 2015, all of the <em>latest</em> major browser versions support keep-all.</p>
+        <p>The problem is the Android internet browser that comes with many smartphones does not get updated the way other apps do. This leaves a number of potential visitors with a browser that doesn’t support <code>keep-all</code>, which could result in some visitors having a different experience from what you have designed.</p>
+        <h2>My Solution</h2>
+        <p>I wrap every Korean word in <code>&lt;span&gt;&nbsp;&lt;/span&gt;</code> tags, and style the tags as: <code>white-space: nowrap;</code>. This keeps the words together. I use a JavaScript plugin to add the <code>&lt;span&gt;</code> tags when the page loads.</p>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="js/jquery.mtRangeSlider.js"></script>
+    <script src="js/cjkWrap.js"></script>
+    <script>
+        var $value, tmp, koreanText, sliderHandle;
+
+        function uncheckAll() {
+            "use strict";
+            var w = document.getElementsByTagName("input"),
+                i;
+            for (i = 0; i < w.length; i++) {
+                if (w[i].type === "checkbox") {
+                    w[i].checked = true;
+                }
+            }
+        }
+
+        function slideMove(sliderDataObject) {
+            "use strict";
+            if (sliderDataObject.value < 100) {
+                sliderHandle.update(100);
+                $value.html("100");
+                $(".k-box").css("width", 100);
+            } else {
+                $value.html(sliderDataObject.value);
+                $(".k-box").css("width", sliderDataObject.value);
+            }
+        }
+
+        function slideStart(sliderDataObject) {
+            "use strict";
+            if (sliderDataObject.value < 100) {
+                sliderHandle.update(100);
+                $value.html("100");
+                $(".k-box").css("width", 100);
+            } else {
+                $value.html(sliderDataObject.value);
+                $(".k-box").css("width", sliderDataObject.value);
+            }
+            $(".k-box").css("borderColor", "#828282");
+        }
+
+        function slideStop(sliderDataObject) {
+            "use strict";
+            if (sliderDataObject.value < 100) {
+                sliderHandle.update(100);
+                $value.html("100");
+                $(".k-box").css("width", 100);
+            } else {
+                $value.html(sliderDataObject.value);
+                $(".k-box").css("width", sliderDataObject.value);
+            }
+            $(".k-box").css("borderColor", "#FFFFFF");
+        }
+
+        $(document).ready(function() {
+            "use strict";
+            $value = $("#value");
+
+            $("#slider").mtRangeSlider({
+                min: 0,
+                max: 340,
+                initialValue: 300,
+                onStart: slideStart,
+                onChange: slideMove,
+                onFinish: slideStop
+            });
+
+            sliderHandle = $("#slider").data("mtRangeSlider");
+
+            $("#align-left-justify").change(function () {
+                if ($(this).is(":checked")) {
+                    $(".k-box").css("textAlign", "left");
+                } else {
+                    $(".k-box").css("textAlign", "justify");
+                }
+            });
+
+            $("#word-break").change(function () {
+                if ($(this).is(":checked")) {
+                    $(".k-box").css("wordBreak", "normal");
+                } else {
+                    $(".k-box").css("wordBreak", "keep-all");
+                }
+            });
+
+            $("#white-space").change(function () {
+                if ($(this).is(":checked")) {
+                    $(".cjk-wrap").css("whiteSpace", "normal");
+                } else {
+                    $(".cjk-wrap").css("whiteSpace", "nowrap");
+                }
+            });
+
+            // If the browser is IE8 or older, chkWrap will not create
+            // the wrap function as older Internet Explorers do not
+            // support the functions used in the plugin.
+            if (typeof window.cjkWrap === "function") {
+                window.cjkWrap("k-box");
+            }
+        });
+    </script>
+</body>
+
+</html>
