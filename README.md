@@ -1,6 +1,7 @@
 CJK Word Wrap
 ============================
 
+## *2019 &ndash; Plugin is no longer needed as most active browsers support keep-all*
 ## JavaScript plugin that provides:
 
 * Wrapping each Chinese, Japanese, or Korean (CJK) word in a tag's innerHTML in a `<span class="cjk-wrap"> </span>` set of tags
@@ -79,9 +80,11 @@ The [`word-break: keep-all;`](https://drafts.csswg.org/css-text-3/#word-break-pr
 
 The problem is not all Android phones run the *latest* version of the Android Internet browser. The default browser that comes with Android phones does not get updated the way other apps do. This leaves a number of potential visitors with a browser that doesn’t support keep-all, which could result in some visitors having a different experience from what was designed.
 
-#### Long term
+#### 2019-11-02 &ndash; Plugin is no longer required
 
-I started wrapping Korean words in `<span>` tags in 2013 (using a jQuery based plugin) to control word splitting, as at that time, several browsers (e.g. Chrome) did not support `keep-all`. In 2015, Webkit was updated to support `keep-all` (at which time I converted to a JavaScript based plugin), so now about 95% of the visitors to my site are using a browser that supports `keep-all`. CJK word splitting eventually can be controlled by the keep-all setting without the need for using the nowrap style, once most of the phones that are running older versions of Android Internet browser are replaced.
+I started wrapping Korean words in `<span>` tags in 2013 to control word splitting as, at that time, several browsers (e.g. Chrome) did not support `keep-all`. In 2015, Webkit was updated to support `keep-all`, so at that point, about 95% of the visitors to my site were using a browser that supported `keep-all`.
+
+Four years later (2019), 100% of the visitors to my site are using a browser that supports `word-break: keep-all`. CJK word splitting can now be controlled by `keep-all` without the need for using a JavaScript function to wrap each word in span tags and apply the nowrap style. The last browser that did not support `keep-all` was an older version of Android Internet browser, and I am no longer seeing those older versions in the analytics data.
 
 ## Compatibility
 
